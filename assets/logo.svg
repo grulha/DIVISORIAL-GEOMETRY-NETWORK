@@ -1,0 +1,19 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Divisorial Geometry Network mark">
+  <!-- Singular point on the left resolving into a smooth curve crossing the exceptional divisor on the right -->
+  <g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- left: nodal curve (singular point) -->
+    <path d="M6 20 C 14 20, 14 44, 22 44" />
+    <path d="M6 44 C 14 44, 14 20, 22 20" />
+    <circle cx="14" cy="32" r="1.6" fill="currentColor" stroke="none" />
+
+    <!-- arrow -->
+    <path d="M27 32 H 37" />
+    <path d="M33 28 L 37 32 L 33 36" />
+
+    <!-- right: resolved curve meeting the exceptional divisor -->
+    <line x1="42" y1="14" x2="42" y2="50" stroke-dasharray="3 3" opacity="0.55" />
+    <path d="M42 20 C 50 20, 50 44, 58 44" />
+    <circle cx="42" cy="20" r="1.6" fill="currentColor" stroke="none" />
+    <circle cx="42" cy="44" r="1.6" fill="currentColor" stroke="none" />
+  </g>
+</svg>

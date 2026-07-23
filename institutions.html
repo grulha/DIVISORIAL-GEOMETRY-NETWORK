@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Institutions — Divisorial Geometry Network</title>
+<meta name="description" content="Map of the twelve institutions of the Divisorial Geometry Network across Brazil.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%230D1B2A' stroke-width='3'%3E%3Cpath d='M6 20 C 14 20, 14 44, 22 44'/%3E%3Cpath d='M6 44 C 14 44, 14 20, 22 20'/%3E%3Cline x1='42' y1='14' x2='42' y2='50'/%3E%3Cpath d='M42 20 C 50 20, 50 44, 58 44'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<main id="main">
+
+  <section class="section" style="padding-bottom:0;">
+    <h2><span class="eyebrow">Reach</span>Institutions</h2>
+    <p>Twelve institutions across all five regions of Brazil. Marker colors match each region's tag color used throughout the site. Coordinates are approximate campus locations.</p>
+  </section>
+
+  <section class="section" style="padding-top:24px;">
+    <div id="map" role="img" aria-label="Map of Brazil showing the network's twelve partner institutions"></div>
+    <div class="map-legend">
+      <span><i style="background:#2a9d8f"></i>Norte</span>
+      <span><i style="background:#c1613f"></i>Nordeste</span>
+      <span><i style="background:#b8862b"></i>Centro-Oeste</span>
+      <span><i style="background:#415a77"></i>Sudeste</span>
+      <span><i style="background:#6a4c93"></i>Sul</span>
+    </div>
+  </section>
+
+</main>
+
+<div id="site-footer"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="assets/script.js"></script>
+<script>
+(function(){
+  var REGION_COLOR = {
+    "Norte": "#2a9d8f",
+    "Nordeste": "#c1613f",
+    "Centro-Oeste": "#b8862b",
+    "Sudeste": "#415a77",
+    "Sul": "#6a4c93"
+  };
+
+  var institutions = [
+    { name:"UNIFAP", city:"Macapá, AP", region:"Norte", lat:-0.0389, lng:-51.0664, researcher:"Simone de Almeida Delphim Leal" },
+    { name:"UFAL", city:"Maceió, AL", region:"Nordeste", lat:-9.6498, lng:-35.7089, researcher:"Juliana Roberta Theodoro de Lima" },
+    { name:"UFPB", city:"João Pessoa, PB", region:"Nordeste", lat:-7.1195, lng:-34.8450, researcher:"Miriam da Silva Pereira" },
+    { name:"UFJ", city:"Jataí, GO", region:"Centro-Oeste", lat:-17.8814, lng:-51.7144, researcher:"Luciana Aparecida Elias" },
+    { name:"USP — ICMC", city:"São Carlos, SP", region:"Sudeste", lat:-22.0087, lng:-47.8909, researcher:"Nivaldo de Góes Grulha Júnior (coordinator)" },
+    { name:"UNESP — IBILCE", city:"São José do Rio Preto, SP", region:"Sudeste", lat:-20.8113, lng:-49.3758, researcher:"Andréa C. Prokopczyk Arita &amp; Michelle F. Zanchetta Morgado" },
+    { name:"UNESP — IGCE", city:"Rio Claro, SP", region:"Sudeste", lat:-22.3966, lng:-47.5626, researcher:"Thiago de Melo" },
+    { name:"UFABC", city:"Santo André, SP", region:"Sudeste", lat:-23.6493, lng:-46.5313, researcher:"Dahisy Valadão de Souza Lima" },
+    { name:"UFES", city:"Vitória, ES", region:"Sudeste", lat:-20.2934, lng:-40.3378, researcher:"Thiago Filipe da Silva" },
+    { name:"UFSCar", city:"São Carlos, SP", region:"Sudeste", lat:-21.9847, lng:-47.8825, researcher:"Helton G. de Carvalho, Hellen M. de Carvalho Santana &amp; Marcio A. Diniz" },
+    { name:"UFU", city:"Uberlândia, MG", region:"Sudeste", lat:-18.9113, lng:-48.2622, researcher:"Camila Mariana Ruiz" },
+    { name:"UEM", city:"Maringá, PR", region:"Sul", lat:-23.4046, lng:-51.9331, researcher:"Rodrigo Martins &amp; Claudete M. Webler Martins" }
+  ];
+
+  var map = L.map('map', { scrollWheelZoom:false }).setView([-14.5, -51.5], 4);
+
+  var lightTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    maxZoom: 18
+  });
+  var darkTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    maxZoom: 18
+  });
+
+  function currentTheme(){
+    return document.documentElement.getAttribute('data-theme') || 'light';
+  }
+  (currentTheme() === 'dark' ? darkTiles : lightTiles).addTo(map);
+
+  new MutationObserver(function(){
+    var theme = currentTheme();
+    map.eachLayer(function(layer){
+      if (layer === lightTiles || layer === darkTiles) map.removeLayer(layer);
+    });
+    (theme === 'dark' ? darkTiles : lightTiles).addTo(map);
+  }).observe(document.documentElement, { attributes:true, attributeFilter:['data-theme'] });
+
+  institutions.forEach(function(inst){
+    var color = REGION_COLOR[inst.region];
+    L.circleMarker([inst.lat, inst.lng], {
+      radius: 8,
+      weight: 2,
+      color: '#fff',
+      fillColor: color,
+      fillOpacity: 0.95
+    })
+    .addTo(map)
+    .bindPopup('<b>' + inst.name + '</b><br>' + inst.city + '<br>' + inst.researcher);
+  });
+})();
+</script>
+</body>
+</html>
